@@ -46,7 +46,13 @@ class LoginHandler(webapp2.RequestHandler):
         self.response.out.write(login_template.render())
 
 
+class UserHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.out.write(self.request.get('user'))
+
+
 app = webapp2.WSGIApplication(
     [
         ('/', LoginHandler),
+        ('/user', UserHandler),
     ], debug=True)
