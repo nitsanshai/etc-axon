@@ -17,14 +17,16 @@ JINJA_ENV = jinja2.Environment(
 class Game(ndb.Model):
     round = ndb.IntegerProperty(default=0)
     cleared = ndb.BooleanProperty(default=False)
-    headlines = ndb.JsonProperty(default={})
+    headlines = ndb.StringProperty(repeated=True)
+    likes = ndb.JsonProperty(default={})
 
     def nextRound(self):
         self.round += 1
         self.cleared = False
-        for k in self.headlines:
-            if self.headlines[k] > 0:
-                self.headlines[k] *= -1
+        self.headlines = []
+        for k in self.likes:
+            if self.likes[k] > 0:
+                self.likes[k] *= -1
 
     def clearRound(self):
         self.cleared = True
@@ -33,12 +35,12 @@ class Game(ndb.Model):
     def getInfo(self):
         return {
             'round': self.round,
-            'likes': self.headlines,
+            'likes': self.likes,
         }
 
     @staticmethod
     def startGame():
-        game = Game(round=0, cleared=False, headlines={})
+        game = Game(round=0, cleared=False, likes={}, headlines=[])
         game.put()
 
 
@@ -92,14 +94,11 @@ class ReadStateHandler(webapp2.RequestHandler):
         username = self.request.body
         user = User.query(User.name == username).get()
         game = Game.query().get()
-        public_headlines = []
-        for k in game.headlines:
-            if game.headlines[k] > 0:
-                public_headlines.append(k)
         state = {
+            'cleared': game.cleared,
             'round': str(game.round+1),
             'private_headlines': user.headlines[str(game.round+1)],
-            'public_headlines': public_headlines
+            'public_headlines': game.headlines
         }
         self.response.write(json.dumps(json.dumps(state)))
 
@@ -107,7 +106,6 @@ class ReadStateHandler(webapp2.RequestHandler):
 class IncrementHeadlineHandler(webapp2.RequestHandler):
     def post(self):
         headline = self.request.body
-        print headline
         q = taskqueue.Queue('headlines')
         q.add(taskqueue.Task(payload=headline, method='PULL'))
 
@@ -128,9 +126,10 @@ class HeadlinesWorker(webapp2.RequestHandler):
                     for t in tasks:
                         headline = t.payload
                         if headline in game.headlines:
-                            game.headlines[headline] += 1
+                            game.likes[headline] += 1
                         else:
-                            game.headlines[headline] = 1
+                            game.likes[headline] = 1
+                            game.headlines.append(headline)
                     game.put()
                 try:
                     update_counts()
