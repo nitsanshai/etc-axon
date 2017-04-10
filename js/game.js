@@ -7,6 +7,22 @@ $(document).ready(function() {
           <a class="col s4 l2 offset-l2 waves-effect waves-light btn amber darken-2"><i class="material-icons left">share</i>SHARE</a>\
         </div>';
 
+    $('a').click(function() {
+        var headline = $(this).siblings().text();
+        console.log(headline);
+        $.ajax({
+            url: '/increment-headline',
+            type: 'POST',
+            data: headline,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function() {
+                console.log('GOT EM');
+            }
+        });
+    });
+
     setInterval(function() {
         $.ajax({
             url: '/read-state',
@@ -14,17 +30,17 @@ $(document).ready(function() {
             data: $('#username').text(),
             dataType: 'json',
             cache: false,
-            contentType:false,
+            contentType: false,
             processData: false,
             success: function(state) {
                 state = JSON.parse(state);
-                $('[data-headlines="private"]').empty();
-                for (var i in state['private_headlines']) {
-                    console.log(state['private_headlines'][i]);
-                    if (state['private_headlines'][i]) {
-                        var headline = state['private_headlines'][i];
+                $('[data-headlines="public"]').empty();
+                for (var i in state['public_headlines']) {
+                    console.log(state['public_headlines'][i]);
+                    if (state['public_headlines'][i]) {
+                        var headline = state['public_headlines'][i];
                         var elem = headline_part_1 + headline + headline_part_2;
-                        $('[data-headlines="private"]').append(elem);
+                        $('[data-headlines="public"]').append(elem);
                     }
                 }
             }

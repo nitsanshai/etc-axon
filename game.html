@@ -19,6 +19,14 @@
           <h3 class="col s12 center-align">YOUR HEADLINES</h3>
         </div>
         <div data-headlines="private">
+          {% for headline in private_headlines %}
+          {% if headline %}
+          <div class="row container">
+            <div class="col s8 card-panel center-align white-text blue-grey darken-2">{{ headline }}</div>
+            <a class="col s4 l2 offset-l2 waves-effect waves-light btn amber darken-2"><i class="material-icons left">share</i>SHARE</a>
+          </div>
+          {% endif %}
+          {% endfor %}
           <!--<div class="row container">
             <div class="col s8 card-panel center-align white-text blue-grey darken-2">This is what a headline will look like.</div>
             <a class="col s4 l2 offset-l2 waves-effect waves-light btn amber darken-2"><i class="material-icons left">share</i>SHARE</a>
