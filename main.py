@@ -111,6 +111,15 @@ class IncrementHeadlineHandler(webapp2.RequestHandler):
         q = taskqueue.Queue('headlines')
         q.add(taskqueue.Task(payload=headline, method='PULL'))
 
+class IncrementRoundHandler(webapp2.RequestHandler):
+    def post(self):
+        game.nextRound();
+        game.put();
+
+class ClearRoundHandler(webapp2.RequestHandler):
+    def post(self):
+        game.clearRound();
+        game.put();
 
 class HeadlinesWorker(webapp2.RequestHandler):
     def get(self):
@@ -147,5 +156,7 @@ app = webapp2.WSGIApplication(
         ('/user', UserHandler),
         ('/read-state', ReadStateHandler),
         ('/increment-headline', IncrementHeadlineHandler),
+        ('/increment-round', IncrementRoundHandler),
+        ('/clear-page', ClearRoundHandler),
         ('/_ah/start', HeadlinesWorker),
     ], debug=True)
