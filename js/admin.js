@@ -26,4 +26,20 @@ $(document).ready(function() {
             }
         });
     });
+
+    setInterval(function() {
+        $.ajax({
+            url: '/unity-read',
+            type: 'GET',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(state) {
+                for (var i in state['public_headlines']) {
+                    $('#showInfo').append('<h4>'+state['public_headlines'][i]+'</h4>');
+                    $('#showInfo').append('<h4>'+state['likes'][state['public_headlines'][i]]+'</h4>');
+                }
+            }
+        });
+    }, 1000);
 });
