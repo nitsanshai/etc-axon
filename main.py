@@ -21,15 +21,18 @@ class Game(ndb.Model):
     likes = ndb.JsonProperty(default={})
 
     def nextRound(self):
-        self.round += 1
+        #self.round += 1
         self.cleared = False
-        self.headlines = []
+        """
         for k in self.likes:
             if self.likes[k] > 0:
                 self.likes[k] *= -1
+        """
 
     def clearRound(self):
         self.cleared = True
+        self.headlines = []
+        self.likes = {}
 
 
     def getInfo(self):
@@ -89,18 +92,25 @@ class UserHandler(webapp2.RequestHandler):
         }))
 
 
+class AdminHandler(webapp2.RequestHandler):
+    def get(self):
+        admin_template = JINJA_ENV.get_template('admin.html')
+        self.response.out.write(admin_template.render())
+
+
 class ReadStateHandler(webapp2.RequestHandler):
     def post(self):
         username = self.request.body
         user = User.query(User.name == username).get()
         game = Game.query().get()
+        print game.likes
         state = {
             'cleared': game.cleared,
             'round': str(game.round+1),
             'private_headlines': user.headlines[str(game.round+1)],
             'public_headlines': game.headlines
         }
-        self.response.write(json.dumps(json.dumps(state)))
+        self.response.write(json.dumps(state))
 
 
 class IncrementHeadlineHandler(webapp2.RequestHandler):
@@ -111,13 +121,15 @@ class IncrementHeadlineHandler(webapp2.RequestHandler):
 
 class IncrementRoundHandler(webapp2.RequestHandler):
     def post(self):
-        game.nextRound();
-        game.put();
+        game = Game.query().get()
+        game.nextRound()
+        game.put()
 
 class ClearRoundHandler(webapp2.RequestHandler):
     def post(self):
-        game.clearRound();
-        game.put();
+        game = Game.query().get()
+        game.clearRound()
+        game.put()
 
 class HeadlinesWorker(webapp2.RequestHandler):
     def get(self):
@@ -153,6 +165,7 @@ app = webapp2.WSGIApplication(
     [
         ('/', LoginHandler),
         ('/user', UserHandler),
+        ('/admin', AdminHandler),
         ('/read-state', ReadStateHandler),
         ('/increment-headline', IncrementHeadlineHandler),
         ('/increment-round', IncrementRoundHandler),
