@@ -36,8 +36,8 @@ $(document).ready(function() {
             processData: false,
             success: function(state) {
                 for (var i in state['public_headlines']) {
-                    $('#showInfo').append('<h4>'+state['public_headlines'][i]+'</h4>');
-                    $('#showInfo').append('<h4>'+state['likes'][state['public_headlines'][i]]+'</h4>');
+                    $('#showInfo').append('<h4 class="col s6">'+state['public_headlines'][i]+'</h4>');
+                    $('#showInfo').append('<h4 class="col s6">'+state['likes'][state['public_headlines'][i]]+'</h4>');
                 }
             }
         });
