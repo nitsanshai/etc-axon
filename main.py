@@ -129,15 +129,13 @@ class IncrementHeadlineHandler(webapp2.RequestHandler):
 
 class IncrementRoundHandler(webapp2.RequestHandler):
     def post(self):
-        game = Game.query().get()
-        game.nextRound()
-        game.put()
+        q = taskqueue.Queue('headlines')
+        q.add(taskqueue.Task(payload='increment-round', method='PULL'))
 
 class ClearRoundHandler(webapp2.RequestHandler):
     def post(self):
-        game = Game.query().get()
-        game.clearRound()
-        game.put()
+        q = taskqueue.Queue('headlines')
+        q.add(taskqueue.Task(payload='clear-round', method='PULL'))
 
 class HeadlinesWorker(webapp2.RequestHandler):
     def get(self):
@@ -154,7 +152,11 @@ class HeadlinesWorker(webapp2.RequestHandler):
                     game = Game.query().get()
                     for t in tasks:
                         headline = t.payload
-                        if headline in game.headlines:
+                        if headline == 'increment-round':
+                            game.nextRound()
+                        elif headline == 'clear-round':
+                            game.clearRound()
+                        elif headline in game.headlines:
                             game.likes[headline] += 1
                         else:
                             game.likes[headline] = 1
