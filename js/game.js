@@ -6,8 +6,7 @@ $(document).ready(function() {
     var headline_part_2 = '</div>\
 <a class="col s4 l2 offset-l2 waves-effect waves-light btn amber darken-2"><i class="material-icons left">plus_one</i>UPVOTE</a></div>';
 
-    function incrementHeadline() {
-        var headline = "";
+    function incrementHeadline(headline) {
         $.ajax({
             url: '/increment-headline',
             type: 'POST',
@@ -21,7 +20,10 @@ $(document).ready(function() {
         });
     }
 
-    $('a').click(function(event) { console.log(event); incrementHeadline(); });
+    $('a').click(function(event) {
+        var headline = $($(event.target).siblings()[0]).text();
+        incrementHeadline(headline);
+    });
 
     setInterval(function() {
         $.ajax({
@@ -46,8 +48,8 @@ $(document).ready(function() {
                         var elem = headline_part_1 + headline + headline_part_2;
                         $('[data-headlines="public"]').append(elem);
                         $('[data-headlines="public"]>div:last a').click(function(event) {
-                            console.log(event);
-                            incrementHeadline();
+                            var headline = $($(event.target).siblings()[0]).text();
+                            incrementHeadline(headline);
                         });
                     }
                 }
