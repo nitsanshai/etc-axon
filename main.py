@@ -113,7 +113,7 @@ class ReadStateHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(state))
 
 class UnityReadHandler(webapp2.RequestHandler):
-    def post(self):
+    def get(self):
         game = Game.query().get()
         state = {
             'public_headlines': game.headlines,
