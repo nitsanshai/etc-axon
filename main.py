@@ -37,8 +37,8 @@ class Game(ndb.Model):
 
     def getInfo(self):
         return {
-            'round': self.round,
-            'likes': self.likes,
+            'headlines': self.headlines,
+            'likes': self.likes
         }
 
     @staticmethod
@@ -112,6 +112,14 @@ class ReadStateHandler(webapp2.RequestHandler):
         }
         self.response.write(json.dumps(state))
 
+class UnityReadHandler(webapp2.RequestHandler):
+    def post(self):
+        game = Game.query().get()
+        state = {
+            'public_headlines': game.headlines,
+            'likes': game.likes
+        }
+        self.response.write(json.dumps(state))
 
 class IncrementHeadlineHandler(webapp2.RequestHandler):
     def post(self):
@@ -167,6 +175,7 @@ app = webapp2.WSGIApplication(
         ('/user', UserHandler),
         ('/admin', AdminHandler),
         ('/read-state', ReadStateHandler),
+        ('/unity-read', UnityReadHandler),
         ('/increment-headline', IncrementHeadlineHandler),
         ('/increment-round', IncrementRoundHandler),
         ('/clear-page', ClearRoundHandler),
