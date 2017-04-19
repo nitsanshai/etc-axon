@@ -38,6 +38,95 @@ class Game(ndb.Model):
             'likes': self.likes
         }
 
+    def reset(self):
+        self.round = 0
+        self.cleared = False
+        self.headlines = []
+        self.likes = {}
+        # for i in range(1,9):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['1gogan_truth1', '1gogan_lie1'],
+        #         3: ['', ''],
+        #         4: ['', '']}).put()
+
+        # for i in range(9,17):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['1gogan_truth2', '1gogan_lie2'],
+        #         3: ['', ''],
+        #         4: ['', '']}).put()
+
+        # for i in range(17,25):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['2gogan_truth1', '2gogan_lie1'],
+        #         4: ['', '']}).put()
+
+        # for i in range(25,33):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['2gogan_truth2', '2gogan_lie2'],
+        #         4: ['', '']}).put()
+
+        # for i in range(33,41):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['', ''],
+        #         4: ['3gogan_truth1', '3gogan_lie1']}).put()
+
+        # for i in range(41,49):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['', ''],
+        #         4: ['3gogan_truth2', '3gogan_lie2']}).put()
+
+        # for i in range(49,57):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['1roosa_truth1', '1roosa_lie1'],
+        #         3: ['', ''],
+        #         4: ['', '']}).put()
+
+        # for i in range(57,65):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['1roosa_truth2', '1roosa_lie2'],
+        #         3: ['', ''],
+        #         4: ['', '']}).put()
+
+        # for i in range(65,73):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['2roosa_truth1', '2roosa_lie1'],
+        #         4: ['', '']}).put()
+
+        # for i in range(73,81):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['2roosa_truth2', '2roosa_lie2'],
+        #         4: ['', '']}).put()
+
+        # for i in range(81,89):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['', ''],
+        #         4: ['3roosa_truth1', '3roosa_lie1']}).put()
+
+        # for i in range(89,97):
+        #     User(name='axon'+i, team=1, headlines={
+        #         1: ['', ''],
+        #         2: ['', ''],
+        #         3: ['', ''],
+        #         4: ['3roosa_truth2', '3roosa_lie2']}).put()
+
 class User(ndb.Model):
     name = ndb.StringProperty()
     team = ndb.IntegerProperty()
@@ -91,91 +180,8 @@ class UnityReadHandler(webapp2.RequestHandler):
 
 class ResetHandler(webapp2.RequestHandler):
     def post(self):
-        for i in range(1,9):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['1gogan_truth1', '1gogan_lie1'],
-                3: ['', ''],
-                4: ['', '']}).put()
-
-        for i in range(9,17):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['1gogan_truth2', '1gogan_lie2'],
-                3: ['', ''],
-                4: ['', '']}).put()
-
-        for i in range(17,25):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['2gogan_truth1', '2gogan_lie1'],
-                4: ['', '']}).put()
-
-        for i in range(25,33):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['2gogan_truth2', '2gogan_lie2'],
-                4: ['', '']}).put()
-
-        for i in range(33,41):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['', ''],
-                4: ['3gogan_truth1', '3gogan_lie1']}).put()
-
-        for i in range(41,49):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['', ''],
-                4: ['3gogan_truth2', '3gogan_lie2']}).put()
-
-        for i in range(49,57):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['1roosa_truth1', '1roosa_lie1'],
-                3: ['', ''],
-                4: ['', '']}).put()
-
-        for i in range(57,65):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['1roosa_truth2', '1roosa_lie2'],
-                3: ['', ''],
-                4: ['', '']}).put()
-
-        for i in range(65,73):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['2roosa_truth1', '2roosa_lie1'],
-                4: ['', '']}).put()
-
-        for i in range(73,81):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['2roosa_truth2', '2roosa_lie2'],
-                4: ['', '']}).put()
-
-        for i in range(81,89):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['', ''],
-                4: ['3roosa_truth1', '3roosa_lie1']}).put()
-
-        for i in range(89,97):
-            User(name='axon'+i, team=1, headlines={
-                1: ['', ''],
-                2: ['', ''],
-                3: ['', ''],
-                4: ['3roosa_truth2', '3roosa_lie2']}).put()
-
-        Game(round=0, cleared=False, likes={}, headlines=[]).put()
+        q = taskqueue.Queue('headlines')
+        q.add(taskqueue.Task(payload='reset', method='PULL'))
 
 class IncrementHeadlineHandler(webapp2.RequestHandler):
     def post(self):
@@ -212,6 +218,8 @@ class HeadlinesWorker(webapp2.RequestHandler):
                             game.nextRound()
                         elif headline == 'clear-round':
                             game.clearRound()
+                        elif headline == 'reset':
+                            game.reset()
                         elif headline in game.headlines:
                             game.likes[headline] += 1
                         else:
