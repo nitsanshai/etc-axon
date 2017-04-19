@@ -27,6 +27,20 @@ $(document).ready(function() {
         });
     });
 
+    $('#reset').click(function() {
+        console.log("REBOOT");
+        $.ajax({
+            url: '/reset',
+            type: 'POST',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function() {
+                console.log('RESET');
+            }
+        });
+    });
+
     setInterval(function() {
         $.ajax({
             url: '/unity-read',

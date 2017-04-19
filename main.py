@@ -21,19 +21,16 @@ class Game(ndb.Model):
     likes = ndb.JsonProperty(default={})
 
     def nextRound(self):
-        #self.round += 1
+        self.round += 1
         self.cleared = False
-        """
         for k in self.likes:
             if self.likes[k] > 0:
                 self.likes[k] *= -1
-        """
 
     def clearRound(self):
         self.cleared = True
         self.headlines = []
         self.likes = {}
-
 
     def getInfo(self):
         return {
@@ -41,44 +38,15 @@ class Game(ndb.Model):
             'likes': self.likes
         }
 
-    @staticmethod
-    def startGame():
-        game = Game(round=0, cleared=False, likes={}, headlines=[])
-        game.put()
-
-
 class User(ndb.Model):
     name = ndb.StringProperty()
     team = ndb.IntegerProperty()
     headlines = ndb.JsonProperty()
 
-    @staticmethod
-    def makeDummies():
-        User(name='nitsan', team=1, headlines={
-            1: ['nitsans headline 1', 'nitsans second headline'],
-            2: ['headline 2', 'headline 2 part twooooo'],
-            3: ['headline 3', ''],
-            4: ['headline 4', ''],
-        }).put()
-        User(name='brad', team=1, headlines={
-            1: ['brads terrible headline', 'other headline'],
-            2: ['headline 2', 'headline 2 part twooooo'],
-            3: ['headline 3', ''],
-            4: ['headline 4', ''],
-        }).put()
-        User(name='roman', team=2, headlines={
-            1: ['headline 1', ''],
-            2: ['headline 2', 'headline 2 part twooooo'],
-            3: ['headline 3', ''],
-            4: ['headline 4', ''],
-        }).put()
-
-
 class LoginHandler(webapp2.RequestHandler):
     def get(self):
         login_template = JINJA_ENV.get_template('index.html')
         self.response.out.write(login_template.render())
-
 
 class UserHandler(webapp2.RequestHandler):
     def get(self):
@@ -120,6 +88,94 @@ class UnityReadHandler(webapp2.RequestHandler):
             'likes': game.likes
         }
         self.response.write(json.dumps(state))
+
+class ResetHandler(webapp2.RequestHandler):
+    def post(self):
+        for i in range(1,9):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['1gogan_truth1', '1gogan_lie1'],
+                3: ['', ''],
+                4: ['', '']}).put()
+
+        for i in range(9,17):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['1gogan_truth2', '1gogan_lie2'],
+                3: ['', ''],
+                4: ['', '']}).put()
+
+        for i in range(17,25):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['2gogan_truth1', '2gogan_lie1'],
+                4: ['', '']}).put()
+
+        for i in range(25,33):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['2gogan_truth2', '2gogan_lie2'],
+                4: ['', '']}).put()
+
+        for i in range(33,41):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['', ''],
+                4: ['3gogan_truth1', '3gogan_lie1']}).put()
+
+        for i in range(41,49):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['', ''],
+                4: ['3gogan_truth2', '3gogan_lie2']}).put()
+
+        for i in range(49,57):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['1roosa_truth1', '1roosa_lie1'],
+                3: ['', ''],
+                4: ['', '']}).put()
+
+        for i in range(57,65):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['1roosa_truth2', '1roosa_lie2'],
+                3: ['', ''],
+                4: ['', '']}).put()
+
+        for i in range(65,73):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['2roosa_truth1', '2roosa_lie1'],
+                4: ['', '']}).put()
+
+        for i in range(73,81):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['2roosa_truth2', '2roosa_lie2'],
+                4: ['', '']}).put()
+
+        for i in range(81,89):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['', ''],
+                4: ['3roosa_truth1', '3roosa_lie1']}).put()
+
+        for i in range(89,97):
+            User(name='axon'+i, team=1, headlines={
+                1: ['', ''],
+                2: ['', ''],
+                3: ['', ''],
+                4: ['3roosa_truth2', '3roosa_lie2']}).put()
+
+        Game(round=0, cleared=False, likes={}, headlines=[]).put()
 
 class IncrementHeadlineHandler(webapp2.RequestHandler):
     def post(self):
@@ -178,6 +234,7 @@ app = webapp2.WSGIApplication(
         ('/admin', AdminHandler),
         ('/read-state', ReadStateHandler),
         ('/unity-read', UnityReadHandler),
+        ('/reset', ResetHandler),
         ('/increment-headline', IncrementHeadlineHandler),
         ('/increment-round', IncrementRoundHandler),
         ('/clear-page', ClearRoundHandler),
