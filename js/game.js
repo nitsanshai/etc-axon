@@ -44,7 +44,7 @@ $(document).ready(function() {
                 var len = $('[data-headlines="public"]').children().length;
                 for (var i in state['public_headlines']) {
                     var headline = state['public_headlines'][i];
-                    if (i > len && headline) {
+                    if (i >= len && headline) {
                         console.log(i);
                         console.log(len);
                         var elem = headline_part_1 + headline + headline_part_2;
