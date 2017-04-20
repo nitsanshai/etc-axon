@@ -23,6 +23,8 @@ $(document).ready(function() {
     $('a').click(function(event) {
         var headline = $($(event.target).siblings()[0]).text();
         incrementHeadline(headline);
+        $(this).html('<i class="material-icons left">check_circle</i>');
+        $(this).prop('disabled', true);
     });
 
     setInterval(function() {
